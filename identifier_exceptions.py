@@ -1,4 +1,4 @@
-exceptions = {
+idExceptions = {
     "http://repositorio.unicamp.br":"localhost",
     "https://repositorio.ufrn.br":"repositorio.ufrn.br",
     "https://tede.ufam.edu.br":"tede.ufam.edu.br",

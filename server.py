@@ -1,6 +1,7 @@
 from dc_ore_packager import DCOREPackager
 from flask import Flask, render_template, request, send_file
 from urllib.parse import urlparse
+from identifier_exceptions import idExceptions
 
 app = Flask(__name__)
 
@@ -18,7 +19,7 @@ def homepage():
 def get_package():
     fullURL = request.args.get("fullurl")
     url = parseURL(fullURL)
-    pkg = DCOREPackager(url['base'], url['handle'], idExceptions=exceptions)
+    pkg = DCOREPackager(url['base'], url['handle'], idExceptions=idExceptions)
     ofile = pkg.getPackage()
     if (ofile is not None):
         return send_file(
