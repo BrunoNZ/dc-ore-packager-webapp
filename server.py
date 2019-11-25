@@ -1,8 +1,12 @@
-from dc_ore_packager_BrunoNZ import DCOREPackager
+from dc_ore_packager import DCOREPackager
 from flask import Flask, render_template, request, send_file
 from urllib.parse import urlparse
 
 app = Flask(__name__)
+
+pkg = DCOREPackager('http://demo.dspace.org', '10673/123123' )
+x = pkg.getPackage()
+print(x)
 
 def parseURL(fullURL):
     o = urlparse(fullURL)
@@ -19,11 +23,15 @@ def get_package():
     fullURL = request.args.get("fullurl")
     url = parseURL(fullURL)
     pkg = DCOREPackager(url['base'], url['handle'])
-    return send_file(
-        pkg.getPackage(),
-        as_attachment=True,
-        mimetype="application/zip",
-        attachment_filename="item.zip")
+    ofile = pkg.getPackage()
+    if (ofile is not None):
+        return send_file(
+            ofile,
+            as_attachment=True,
+            mimetype="application/zip",
+            attachment_filename="item.zip")
+    else:
+        return render_template('home.html', error='Item not found')
 
 if __name__ == "__main__":
     app.run()

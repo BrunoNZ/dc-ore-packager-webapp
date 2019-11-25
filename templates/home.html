@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <body>
 
 <h2>OAI - DC/ORE Packager</h2>
+
+{% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+{% endif %}
 
 <form action="{{ url_for('get_package') }}">
   URL:
