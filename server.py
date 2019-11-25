@@ -4,10 +4,6 @@ from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-pkg = DCOREPackager('http://demo.dspace.org', '10673/123123' )
-x = pkg.getPackage()
-print(x)
-
 def parseURL(fullURL):
     o = urlparse(fullURL)
     baseURL = "://".join([o.scheme,o.netloc])
@@ -22,7 +18,7 @@ def homepage():
 def get_package():
     fullURL = request.args.get("fullurl")
     url = parseURL(fullURL)
-    pkg = DCOREPackager(url['base'], url['handle'])
+    pkg = DCOREPackager(url['base'], url['handle'], idExceptions=exceptions)
     ofile = pkg.getPackage()
     if (ofile is not None):
         return send_file(
