@@ -19,7 +19,8 @@ def homepage():
 def get_package():
     fullURL = request.args.get("fullurl")
     url = parseURL(fullURL)
-    pkg = DCOREPackager(url['base'], url['handle'], idExceptions=idExceptions)
+    pkg = DCOREPackager(url['base'], url['handle'],
+                        idExceptions=idExceptions, verifySSL=False)
     ofile = pkg.getPackage()
     if (ofile is not None):
         return send_file(
