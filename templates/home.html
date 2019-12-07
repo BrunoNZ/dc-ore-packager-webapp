@@ -9,13 +9,18 @@
     <p class=error><strong>Error:</strong> {{ error }}
 {% endif %}
 
-<form action="{{ url_for('get_package') }}">
-  URL:
-  <br>
-  <input type="text" style="width: 400px;" name="fullurl"
-    value="http://demo.dspace.org/xmlui/handle/10673/7">
-  <br>
-  <input type="submit" value="Get Package">
+<form action="{{ url_for('get_package') }}" method="post">
+URL:
+<br>
+<textarea rows="10" style="width: 400px;" name="urlList">
+http://demo.dspace.org/xmlui/handle/10673/3
+http://demo.dspace.org/xmlui/handle/10673/4
+http://demo.dspace.org/xmlui/handle/10673/5
+http://demo.dspace.org/xmlui/handle/10673/6
+http://demo.dspace.org/xmlui/handle/10673/7
+</textarea>
+<br>
+<input type="submit" value="Get Package">
 </form>
 
 </br>

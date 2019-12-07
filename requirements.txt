@@ -3,4 +3,4 @@ gunicorn
 requests
 uuid
 pathlib
-dc-ore-packager>=0.0.2
+dc-ore-packager==0.0.3

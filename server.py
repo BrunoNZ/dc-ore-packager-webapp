@@ -3,33 +3,49 @@ from flask import Flask, render_template, request, send_file
 from urllib.parse import urlparse
 from identifier_exceptions import idExceptions
 
+
 app = Flask(__name__)
+app.config.from_object(__name__)
+app.config['SECRET_KEY'] = '553C1E52E8EDE813163D5CE322BBE'
 
-def parseURL(fullURL):
-    o = urlparse(fullURL)
-    baseURL = "://".join([o.scheme,o.netloc])
-    handle = o.path.rsplit("/handle/").pop()
-    return {"base":baseURL, "handle":handle}
 
-@app.route("/")
-def homepage():
-    return render_template('home.html')
+def parseUrlList(urlList):
+    handleList = []
+    baseUrlList = []
+    for url in urlList:
+        o = urlparse(url)
+        baseUrlList.append("://".join([o.scheme,o.netloc]))
+        handleList.append(o.path.rsplit("/handle/").pop())
 
-@app.route("/get")
+    baseURL = baseUrlList[0]
+    for i in range(1,len(baseUrlList)):
+        if (baseURL != baseUrlList[i]):
+            raise
+
+    return {"baseURL":baseURL, "handleList":handleList}
+
+
+@app.route("/", methods=['GET','POST'])
 def get_package():
-    fullURL = request.args.get("fullurl")
-    url = parseURL(fullURL)
-    pkg = DCOREPackager(url['base'], url['handle'],
-                        idExceptions=idExceptions, verifySSL=False)
-    ofile = pkg.getPackage()
-    if (ofile is not None):
-        return send_file(
-            ofile,
-            as_attachment=True,
-            mimetype="application/zip",
-            attachment_filename="item.zip")
+
+    if request.method == 'GET':
+        return render_template('home.html')
+
     else:
-        return render_template('home.html', error='Item not found')
+        urlList = request.form.get('urlList').splitlines()
+        repo = parseUrlList(urlList)
+        pkg = DCOREPackager(repo['baseURL'], repo['handleList'],
+                            idExceptions=idExceptions, verifySSL=False)
+        ofile = pkg.getPackage()
+        if (ofile is not None):
+            return send_file(
+                ofile,
+                as_attachment=True,
+                mimetype="application/zip",
+                attachment_filename="item.zip")
+        else:
+            return render_template('home.html', error='Item not found')
+
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=False)
