@@ -33,9 +33,13 @@ def get_package():
 
     else:
         urlList = request.form.get('urlList').splitlines()
+        useIdPrefix = request.form.get('useIdPrefix') is not None
         repo = parseUrlList(urlList)
         pkg = DCOREPackager(repo['baseURL'], repo['handleList'],
-                            idExceptions=idExceptions, verifySSL=False)
+                            idExceptions=idExceptions,
+                            useIdPrefix=useIdPrefix,
+                            verifySSL=False,
+                            debug=True)
         ofile = pkg.getPackage()
         if (ofile is not None):
             return send_file(
