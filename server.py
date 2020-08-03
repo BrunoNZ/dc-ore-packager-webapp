@@ -39,9 +39,11 @@ def get_package():
                             idExceptions=idExceptions,
                             useIdPrefix=useIdPrefix,
                             verifySSL=False,
-                            debug=True)
+                            debug=False)
         ofile = pkg.getPackage()
+        dcSet = pkg.getDCElements()
         if (ofile is not None):
+            print(dcSet)
             return send_file(
                 ofile,
                 as_attachment=True,
